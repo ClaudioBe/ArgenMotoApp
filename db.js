@@ -1,3 +1,5 @@
-localStorage.setItem("clientes", JSON.stringify([]))
-localStorage.setItem("turnos", JSON.stringify([]))
-localStorage.setItem("motos", JSON.stringify([]))
+if(localStorage.getItem("clientes")==null) localStorage.setItem("clientes", JSON.stringify([]))
+if(localStorage.getItem("turnos")==null) localStorage.setItem("turnos", JSON.stringify([]))
+if(localStorage.getItem("motos")==null) localStorage.setItem("motos", JSON.stringify([]))
+if(localStorage.getItem("facturas")==null) localStorage.setItem("facturas", JSON.stringify([]))
+if(localStorage.getItem("vendedores")==null) localStorage.setItem("vendedores", JSON.stringify([]))
