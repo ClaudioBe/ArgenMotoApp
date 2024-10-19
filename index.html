@@ -9,12 +9,19 @@
 <body>
     <header class="header">
         <nav class="navbar">
-                <a href="ArgenMoto/inicio.html">Inicio</a>
-                <a href="ArgenMoto/">Solicitar Turno</a>
-                <a href="ArgenMoto/registrarCliente.html">Registrar Cliente</a>
-                <a href="ArgenMoto/registrarMoto.html">Registrar Moto</a>
+                <a href="" onclick="listarClientes(event)">Clientes</a>
+                <a href="">Turnos</a>
+                <a href="">Solicitar Turno</a>
+                <a href='' onclick="registrarClienteHTML(event)">Registrar Cliente</a>
+                <a href="" onclick="registrarMotoHTML(event)">Registrar Moto</a>
         </nav>
-    </header> 
+        <div id="container"></div>
+    </header>  
     <script type="text/javascript" src="db.js"></script> 
+    <script type="text/javascript" src="Funciones/clientes.js"></script>
+    <script type="text/javascript" src="Funciones/motos.js"></script>
+    <script type="text/javascript" src="Funciones/turnos.js"></script>
+    <script type="text/javascript" src="Funciones/facturas.js"></script>
+   
 </body>
 </html>
