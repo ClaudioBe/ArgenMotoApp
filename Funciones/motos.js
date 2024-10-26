@@ -9,7 +9,7 @@ const registrarMotoHTML=(e)=>{
         <input id="marca" type="text" required={true}/>
         <label>Modelo</label>
         <input id="modelo" type="text" required={true}/>
-        <label>Anio</label>
+        <label>Año</label>
         <input id="anio" type="number" required={true}/>
         <label>Kilometraje</label>
         <input id="kilometraje" type="number" required={true}/>
