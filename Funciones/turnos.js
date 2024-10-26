@@ -29,8 +29,20 @@ const registrarTurnoHTML=(e)=>{
         <input id="estado" type="text" required={true}/>
         <button onclick="registrarTurno(event)">Solicitar</button>
     </form>`
-
-    //si el usuario selecciona una fecha se desbloquea la etqiqueta select, para
+    //si el usuario selecciona un sabado o un domingo salta un alert 
+    document.getElementById('fecha').addEventListener('input', function(e){
+        //getUTCDay devuelve un entero del 0 al 6.. siendo 0: Domingo y 6:Sabado
+        const dia = new Date(this.value).getUTCDay();
+        //si el dia seleccionado es un sabado o un domingo...
+        if(dia===0 || dia ===6){
+            //para que no se borre lo demas del formulario
+            e.preventDefault();
+            //elimino la seleccion
+            this.value = '';
+            alert('Fines de semana no disponibles!');
+        }
+    });
+    //si el usuario selecciona una fecha se desbloquea la etiqueta select, para
     //seleccionar el horario deseado y se quita el title con el mensaje
     document.getElementById('fecha').addEventListener('change',()=>{
         const horario=document.getElementById('horario')
