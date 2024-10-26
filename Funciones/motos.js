@@ -32,6 +32,7 @@ const registrarMoto=(e)=>{
     e.preventDefault();
     const motos=JSON.parse(localStorage.getItem("motos"));
     const moto={
+        id:motos.length + 1,
         descripcion:document.getElementById("descripcion").value,
         marca:document.getElementById("marca").value,
         modelo:document.getElementById("modelo").value,
@@ -57,4 +58,53 @@ const registrarMoto=(e)=>{
     document.getElementById("stock_maximo").value = '';
     document.getElementById("precio").value = '';
     alert("Moto registrada con éxito!")
+}
+
+const listarMotos=(e)=>{
+    e.preventDefault()
+    const motos=JSON.parse(localStorage.getItem("motos"));
+    document.getElementById("container").innerHTML=motos.length==0
+    ?`<div><h1>No hay motos registradas</h1></div>` 
+    :motos.map(c=>
+         `<div>
+             <h2>Id: ${c.id}</h2>
+             <h2>Descripcion: ${c.descripcion}</h2>
+             <h2>Marca: ${c.marca}</h2>
+             <h2>Modelo: ${c.modelo}</h2>
+             <h2>Anio: ${c.anio}</h2>
+             <h2>Kilometraje: ${c.kilometraje}</h2>
+             <h2>Nro Chasis: ${c.nro_chasis}</h2>
+             <h2>Stock Actual: ${c.stock_actual}</h2>
+             <h2>Stock Minimo: ${c.stock_minimo}</h2>
+             <h2>Stock Maximo: ${c.stock_maximo}</h2>
+             <h2>Precio: ${c.precio}</h2>
+             <button style='color:red' onclick='eliminarMoto(${c.id})'>Eliminar</button>
+        </div>`
+    )
+}
+
+const consultarMoto=(id)=>{
+    const motos=JSON.parse(localStorage.getItem("motos"));
+    const moto=motos[motos.indexOf(id)];
+    document.getElementById("container").innerHTML=moto==null
+    ?`<div><h2>No hay moto registrada con ese ID</h2></div>`
+    :`<div>
+            <h2>Id: ${c.id}</h2>
+            <h2>Descripcion: ${c.descripcion}</h2>
+            <h2>Marca: ${c.marca}</h2>
+            <h2>Modelo: ${c.modelo}</h2>
+            <h2>Anio: ${c.anio}</h2>
+            <h2>Kilometraje: ${c.kilometraje}</h2>
+            <h2>Nro Chasis: ${c.nro_chasis}</h2>
+            <h2>Stock Actual: ${c.stock_actual}</h2>
+            <h2>Stock Minimo: ${c.stock_minimo}</h2>
+            <h2>Stock Maximo: ${c.stock_maximo}</h2>
+            <h2>Precio: ${c.precio}</h2>
+        </div>`
+}
+
+const eliminarMoto=(id)=>{
+    const motos=JSON.parse(localStorage.getItem("motos"));
+    localStorage.setItem("motos",JSON.stringify(motos.filter(c=>c.id!=id)));
+    listarMotos(new Event('click'))
 }
