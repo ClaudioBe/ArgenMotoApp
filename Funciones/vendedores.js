@@ -48,6 +48,56 @@ const registrarVendedor=(e)=>{
     alert("vendedor registrado con éxito!")
 }
 
+const modificarVendedorHTML=(CUIT)=> {
+    const vendedores = JSON.parse(localStorage.getItem("vendedores"));
+    const vendedor = vendedores.find(v => v.CUIT == CUIT);
+    
+    document.getElementById('container').innerHTML =
+    `<form onsubmit='modificarVendedor(event, ${CUIT})'>
+        <label>CUIT</label>
+        <input id="CUIT" type="number" value='${vendedor.CUIT}' readonly required />
+        <label>Nombre</label>
+        <input id="nombre" type="text" value='${vendedor.nombre}' required />
+        <label>Apellido</label>
+        <input id="apellido" type="text" value='${vendedor.apellido}' required />
+        <label>Provincia</label>
+        <input id="provincia" type="text" value='${vendedor.provincia}' required />
+        <label>Localidad</label>
+        <input id="localidad" type="text" value='${vendedor.localidad}' required />
+        <label>Domicilio</label>
+        <input id="domicilio" type="text" value='${vendedor.domicilio}' required />
+        <label>Email</label>
+        <input id="email" type="text" value='${vendedor.email}' required />
+        <button type="submit">Confirmar cambios</button>
+        <button type="button" onclick='listarVendedores(event)'>Cancelar</button>
+    </form>`;
+}
+
+const modificarVendedor=(e, CUIT)=> {
+    e.preventDefault();
+    const vendedores = JSON.parse(localStorage.getItem('vendedores'));
+
+    // Filtra el vendedor que se va a modificar
+    const vendedoresActualizados = vendedores.filter(v => v.CUIT != CUIT);
+
+    const vendedorModificado = {
+        nombre: document.getElementById("nombre").value,
+        apellido: document.getElementById("apellido").value,
+        CUIT: CUIT,  // Mantenemos el mismo CUIT
+        provincia: document.getElementById("provincia").value,
+        localidad: document.getElementById("localidad").value,
+        domicilio: document.getElementById("domicilio").value,
+        email: document.getElementById("email").value
+    };
+
+    // Agrega el vendedor modificado a la lista
+    vendedoresActualizados.push(vendedorModificado);
+    localStorage.setItem("vendedores", JSON.stringify(vendedoresActualizados));
+
+    alert("Vendedor modificado con éxito!");
+    listarVendedores(new Event('click'));
+}
+
 const listarVendedores=(e)=>{
     e.preventDefault()
     const vendedores=JSON.parse(localStorage.getItem("vendedores"));
@@ -63,6 +113,8 @@ const listarVendedores=(e)=>{
              <h2>Domicilio: ${c.domicilio}</h2>
              <h2>Email: ${c.email}</h2>
              <button style='color:red' onclick='eliminarVendedor(${c.CUIT})'>Eliminar</button>
+             <button onclick='modificarVendedorHTML(${c.CUIT})'>Modificar</button>
+
         </div>`
     )
 }
