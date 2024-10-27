@@ -2,14 +2,12 @@ const registrarFacturaHTML = (e) => {
     e.preventDefault();
     document.getElementById('container').innerHTML = `
     <form onsubmit="registrarFactura(event)">
-        <label>ID</label>
-        <input id="FacturaId" type="number" required/>
 
         <label>Fecha</label>
         <input id="FechaEmision" type="date" required/>
 
-        <label>Cliente ID</label>
-        <input id="ClienteId" type="number" required/>
+        <label>DNI Cliente</label>
+        <input id="ClienteDNI" type="number" required/>
 
         <label>ID Moto</label>
         <input id="IdMoto" type="number" required/>
@@ -50,9 +48,9 @@ const registrarFactura = (e) => {
 
     // Capturar los valores de los campos del formulario
     const factura = {
-        id: parseInt(document.getElementById("FacturaId").value),
+        id:facturas.length?facturas[facturas.length-1].id + 1:1,
         fecha: document.getElementById("FechaEmision").value,
-        clienteId: parseInt(document.getElementById("ClienteId").value),
+        clienteDNI: parseInt(document.getElementById("ClienteDNI").value),
         idMoto: parseInt(document.getElementById("IdMoto").value),
         detalle: document.getElementById("Detalle").value,
         total: parseFloat(document.getElementById("Total").value),
@@ -61,21 +59,13 @@ const registrarFactura = (e) => {
         tipoFactura: document.getElementById("TipoFactura").value
     };
 
-    // Verificar si ya existe una factura con el mismo ID
-    const existe = facturas.some(f => f.id === factura.id);
-    if (existe) {
-        alert("Ya existe una factura registrada con este ID!");
-        return;
-    }
-
     // Agregar la nueva factura al array de facturas
     facturas.push(factura);
     localStorage.setItem("facturas", JSON.stringify(facturas));
 
     // Limpiar los inputs del formulario
-    document.getElementById("FacturaId").value = '';
     document.getElementById("FechaEmision").value = '';
-    document.getElementById("ClienteId").value = '';
+    document.getElementById("ClienteDNI").value = '';
     document.getElementById("IdMoto").value = '';
     document.getElementById("Detalle").value = '';
     document.getElementById("Total").value = '';
@@ -100,7 +90,7 @@ const listarFacturas = (e) => {
             <h3>Fecha de Emisión: ${f.fecha}</h3>
             
             <h4>Datos del Cliente:</h4>
-            <p>Cliente ID: ${f.clienteId}</p>
+            <p>Cliente ID: ${f.clienteDNI}</p>
 
             <h4>Detalle:</h4>
             <p>ID Moto: ${f.idMoto}</p>
@@ -131,7 +121,7 @@ const consultarFactura = (id) => {
             <h3>Fecha de Emisión: ${factura.fecha}</h3>
 
             <h4>Datos del Cliente:</h4>
-            <p>Cliente ID: ${factura.clienteId}</p>
+            <p>Cliente ID: ${factura.clienteDNI}</p>
 
             <h4>Detalle:</h4>
             <p>ID Moto: ${factura.idMoto}</p>
