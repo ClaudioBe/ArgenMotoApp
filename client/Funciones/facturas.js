@@ -1,5 +1,6 @@
 const registrarFacturaHTML = (e) => {
     e.preventDefault();
+    const IDmotos=JSON.parse(localStorage.getItem('motos'))?.map(m=>m.id)
     document.getElementById('container').innerHTML = `
     <form onsubmit="registrarFactura(event)">
 
@@ -9,8 +10,13 @@ const registrarFacturaHTML = (e) => {
         <label>DNI Cliente</label>
         <input id="ClienteDNI" type="number" required/>
 
+        <label>CUIT vendedor</label>
+        <input id="cuitVendedor" type="number" required/>
+
         <label>ID Moto</label>
-        <input id="IdMoto" type="number" required/>
+        <select id='IdMoto'>
+            ${IDmotos.map(id=>`<option>${id}</option>`)}
+        </select>
 
         <label>Detalle</label>
         <input id="Detalle" type="text" required/>
@@ -42,15 +48,16 @@ const registrarFacturaHTML = (e) => {
 // Función para registrar una factura
 const registrarFactura = (e) => {
     e.preventDefault();
-
-    // Inicializar facturas si es necesario
     let facturas = JSON.parse(localStorage.getItem("facturas")) || [];
+    const DNIclientes=JSON.parse(localStorage.getItem('clientes')).map(c=>parseInt(c.DNI))
+    const cuitsVendedores=JSON.parse(localStorage.getItem('vendedores')).map(v=>parseInt(v.CUIT))
 
     // Capturar los valores de los campos del formulario
     const factura = {
         id:facturas.length?facturas[facturas.length-1].id + 1:1,
         fecha: document.getElementById("FechaEmision").value,
-        clienteDNI: parseInt(document.getElementById("ClienteDNI").value),
+        clienteDNI: document.getElementById("ClienteDNI").value,
+        cuitVendedor: document.getElementById("cuitVendedor").value,
         idMoto: parseInt(document.getElementById("IdMoto").value),
         detalle: document.getElementById("Detalle").value,
         total: parseFloat(document.getElementById("Total").value),
@@ -59,13 +66,16 @@ const registrarFactura = (e) => {
         tipoFactura: document.getElementById("TipoFactura").value
     };
 
+    //si existe un cliente con ese DNI
+    if(DNIclientes.includes(factura.clienteDNI)){alert("No existe un cliente con el DNI ingresado!"); return}
+    if(cuitsVendedores.includes(factura.cuitVendedor)){alert("No existe un vendedor con el cuit ingresado!");return}
     // Agregar la nueva factura al array de facturas
     facturas.push(factura);
-    localStorage.setItem("facturas", JSON.stringify(facturas));
-
+    localStorage.setItem("facturas", JSON.stringify(facturas))
     // Limpiar los inputs del formulario
     document.getElementById("FechaEmision").value = '';
     document.getElementById("ClienteDNI").value = '';
+    document.getElementById('cuitVendedor').value='';
     document.getElementById("IdMoto").value = '';
     document.getElementById("Detalle").value = '';
     document.getElementById("Total").value = '';
@@ -74,8 +84,8 @@ const registrarFactura = (e) => {
     document.getElementById("TipoFactura").value = '';
 
     alert("Factura registrada con éxito!");
+    
 };
-
 
 
 const listarFacturas = (e) => {
@@ -89,11 +99,10 @@ const listarFacturas = (e) => {
             <h2>Factura ID: ${f.id}</h2>
             <h3>Fecha de Emisión: ${f.fecha}</h3>
             
-            <h4>Datos del Cliente:</h4>
-            <p>Cliente ID: ${f.clienteDNI}</p>
-
+            <p>Cliente ID:</p> <a href="" onclick='consultarCliente(event,${f.clienteDNI})'>${f.clienteDNI}</a>
+            <p>CUIT vendedor:</p> <a href="" onclick='consultarVendedor(event,${f.cuitVendedor})'>${f.cuitVendedor}</a>
             <h4>Detalle:</h4>
-            <p>ID Moto: ${f.idMoto}</p>
+            <p>ID Moto:</p> <a href="" onclick='consultarMoto(event, ${f.idMoto})'>${f.idMoto}</a>
             <p>Descripción: ${f.detalle}</p>
             
             <p>Total: ${f.total}</p>

@@ -18,9 +18,9 @@ const registrarClienteHTML=(e)=>{
     </form>`
 }
 
-const registrarCliente=(e)=>{
+const registrarCliente=async(e)=>{
     e.preventDefault()
-    const clientes=JSON.parse(localStorage.getItem("clientes"));
+    
     const cliente={
         nombre:document.getElementById("nombre").value,
         apellido:document.getElementById("apellido").value,
@@ -29,23 +29,32 @@ const registrarCliente=(e)=>{
         localidad:document.getElementById("localidad").value,
         domicilio:document.getElementById("domicilio").value 
     }
-    const existe=clientes.some(c =>c.DNI===cliente.DNI);
-    if(existe) {alert("Ya existe un cliente registrado con este DNI!"); return}
-
-    clientes.push(cliente)
-    localStorage.setItem("clientes",JSON.stringify(clientes))
-    //Elimino el contenido de los inputs para poder seguir con los registros 
-    document.getElementById("nombre").value = '';
-    document.getElementById("apellido").value = '';
-    document.getElementById("DNI").value = '';
-    document.getElementById("provincia").value = '';
-    document.getElementById("localidad").value = '';
-    document.getElementById("domicilio").value = '';
-    alert("Cliente registrado con éxito!")
+    
+    const response=await fetch('http://localhost:3001/clientes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cliente)
+    })
+    if(response.ok) {
+        //Elimino el contenido de los inputs para poder seguir con los registros 
+        document.getElementById("nombre").value = '';
+        document.getElementById("apellido").value = '';
+        document.getElementById("DNI").value = '';
+        document.getElementById("provincia").value = '';
+        document.getElementById("localidad").value = '';
+        document.getElementById("domicilio").value = '';
+        alert("Cliente registrado con éxito!")
+    }else{
+        alert("Ya existe un cliente registrado con ese DNI!")
+    }
 }
-const modificarClienteHTML=(DNI)=>{
-    const clientes=JSON.parse(localStorage.getItem("clientes"));
-    const c=clientes.find(c=>c.DNI==DNI);
+const modificarClienteHTML=async(DNI)=>{
+    const response = await fetch(`http://localhost:3001/clientes/${DNI}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        }
+    )
+    const c= await response.json();
     document.getElementById('container').innerHTML=
     `<form onsubmit='modificarCliente(event,${DNI})'>
         <label>Nombre</label>
@@ -63,14 +72,12 @@ const modificarClienteHTML=(DNI)=>{
         <button type="submit">Confirmar cambios</button>
         <button onclick='listarClientes(event)'>Cancelar</button>
     </form>`
+    
 }
 
-const modificarCliente=(e,DNI)=>{
+const modificarCliente=async (e,DNI)=>{
     e.preventDefault()
-    const clis=JSON.parse(localStorage.getItem('clientes'))
-    //elimino el cliente con el DNI proporcionado para despues agregar el cliente modificado
-    const clientes=clis.filter(c=>c.DNI!=DNI);
- 
+    
     const cliente={
         nombre:document.getElementById("nombre").value,
         apellido:document.getElementById("apellido").value,
@@ -79,18 +86,26 @@ const modificarCliente=(e,DNI)=>{
         localidad:document.getElementById("localidad").value,
         domicilio:document.getElementById("domicilio").value 
     }
-    
-    clientes.push(cliente)
-    localStorage.setItem("clientes",JSON.stringify(clientes))
-    
-    alert("Cliente modificado con éxito!")
-    return listarClientes(e);
+    const response=await fetch(`http://localhost:3001/clientes/${DNI}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cliente)
+    })
+    if(response.ok) { 
+        alert("Cliente modificado con éxito!")
+        return listarClientes(e);
+    }
+    else alert("Ya hay un cliente registrado con ese DNI!")       
 }
 
 
-const listarClientes=(e)=>{
+const listarClientes=async(e)=>{
     e.preventDefault()
-    const clientes=JSON.parse(localStorage.getItem("clientes"));
+    const response= await fetch(`http://localhost:3001/clientes/`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    const clientes= await response.json()
     document.getElementById("container").innerHTML=clientes.length==0
     ?`<div><h1>No hay clientes registrados</h1></div>` 
     :clientes.map(c=>
@@ -107,9 +122,12 @@ const listarClientes=(e)=>{
     )
 }
 
-const consultarCliente=(DNI)=>{
-    const clientes=JSON.parse(localStorage.getItem("clientes"));
-    const c=clientes.find(c=>c.DNI===DNI);
+const consultarCliente=async (e,DNI)=>{
+    e.preventDefault()
+    const c= await fetch(`http://localhost:3001/clientes/${DNI}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    })
     document.getElementById("container").innerHTML=c==null
     ?`<div><h2>No hay cliente registrado con ese DNI</h2></div>`
     :`<div>
@@ -123,8 +141,10 @@ const consultarCliente=(DNI)=>{
     </div>`
 }
 
-const eliminarCliente=(DNI)=>{
-    const clientes=JSON.parse(localStorage.getItem("clientes"));
-    localStorage.setItem("clientes",JSON.stringify(clientes.filter(c=>c.DNI!=DNI)));
+const eliminarCliente=async (DNI)=>{
+    await fetch(`http://localhost:3001/clientes/${DNI}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+    })
     listarClientes(new Event('click'))
 }

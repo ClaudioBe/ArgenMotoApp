@@ -94,49 +94,22 @@ const listarTurnos = (e) => {
                 <h2>Motivo: ${t.motivo}</h2>
                 <h2>Estado: ${t.estado}</h2>
                 <button style='color:red' onclick='eliminarTurno(${t.id})'>Eliminar</button>
-                <button onclick='modificarTurnoHTML(${t.id})'>Modificar</button>
+                <button onclick='aceptarTurno(event,${t.id})'>Aceptar</button>
             </div>
         `).join('');
 }
 
-const modificarTurnoHTML = (id) => {
-    const turnos = JSON.parse(localStorage.getItem("turnos"));
-    const turno = turnos.find(t => t.id === id);
-    
-    document.getElementById('container').innerHTML = `
-    <form onsubmit='modificarTurno(event, ${id})'>
-        <label>DNI</label>
-        <input id="DNI" type="number" value='${turno.DNI}' required/>
-        <label>Fecha</label>
-        <input id="fecha" type="date" value='${turno.fecha}' required/>
-        <label>Horario</label>
-        <input id="horario" type="text" value='${turno.horario}' required/>
-        <label>Motivo</label>
-        <select id='motivo'>
-            <option ${turno.motivo === "Asesoramiento" ? "selected" : ""}>Asesoramiento</option>
-            <option ${turno.motivo === "Comprar" ? "selected" : ""}>Comprar</option>
-        </select>
-        <button type="submit">Confirmar cambios</button>
-        <button onclick='listarTurnos(event)'>Cancelar</button>
-    </form>`;
-}
-
-const modificarTurno = (e, id) => {
+const aceptarTurno = (e, id) => {
     e.preventDefault();
     const turnos = JSON.parse(localStorage.getItem("turnos"));
-    
-    const turnoModificado = {
-        id: id,
-        DNI: document.getElementById("DNI").value,
-        fecha: document.getElementById("fecha").value,
-        horario: document.getElementById("horario").value,
-        motivo: document.getElementById("motivo").value,
-        estado: 'Pendiente'  
-    };
+    const turno=turnos.find(t=>t.id==id)
+    turno.estado="aceptado";
+    const trns=turnos.filter(t=>t.id!=id);
+    trns.push(turno)
 
-    const nuevosTurnos = turnos.map(t => t.id === id ? turnoModificado : t);
-    localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
-    alert("Turno modificado con éxito!");
+    localStorage.setItem("turnos",JSON.stringify(trns))
+    
+    alert("Turno aceptado!");
     listarTurnos(e);
 }
 

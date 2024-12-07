@@ -2,7 +2,7 @@
 const registrarMotoHTML=(e)=>{
     e.preventDefault()
     document.getElementById('container').innerHTML=
-    `<form>
+    `<form onsubmit='registrarMoto(event)'>
         <label>Descripcion</label>
         <input id="descripcion" type="text" required={true}/>
         <label>Marca</label>
@@ -23,7 +23,7 @@ const registrarMotoHTML=(e)=>{
         <input id="stock_maximo" type="number" required={true}/>
         <label>Precio</label>
         <input id="precio" type="number" required={true}/>
-        <button onclick="registrarMoto(event)">Registrar</button>
+        <button type='submit'>Registrar</button>
     </form>`
 }
 
@@ -144,9 +144,10 @@ const listarMotos=(e)=>{
     )
 }
 
-const consultarMoto=(id)=>{
+const consultarMoto=(e,id)=>{
+    e.preventDefault()
     const motos=JSON.parse(localStorage.getItem("motos"));
-    const moto=motos[motos.indexOf(id)];
+    const moto=motos.find(m=>m.id==id);
     document.getElementById("container").innerHTML=moto==null
     ?`<div><h2>No hay moto registrada con ese ID</h2></div>`
     :`<div>
