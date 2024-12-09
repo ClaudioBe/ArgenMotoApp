@@ -1,0 +1,109 @@
+/* Estilo general del cuerpo */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* Color de fondo suave */
+}
+
+/* Estilo para el contenedor principal */
+#container {
+    max-width: 800px; /* Ancho máximo del contenedor */
+    margin: 20px auto; /* Centrado horizontal */
+    padding: 20px; /* Espacio interno */
+    background: white; /* Fondo blanco */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Estilo para formularios */
+form {
+    display: flex; /* Flexbox para formularios */
+    flex-direction: column; /* Columna */
+}
+
+form label {
+    margin: 10px 0 5px; /* Margen para las etiquetas */
+}
+
+form input, form select {
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+}
+
+/* Estilo para botones */
+button {
+    margin-top: 10px; /* Margen superior */
+    padding: 10px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    border-radius: 4px; /* Bordes redondeados */
+    color: white; /* Texto blanco */
+    background-color: #28a745; /* Color de fondo verde */
+    cursor: pointer; /* Cambia el cursor al pasar sobre */
+    transition: background-color 0.3s ease; /* Transición de color */
+}
+
+button:hover {
+    background-color: #218838; /* Color más oscuro al pasar el cursor */
+}
+
+button[style='color:red'] {
+    background-color: #dc3545; /* Color rojo para eliminar */
+}
+
+button[style='color:red']:hover {
+    background-color: #c82333; /* Color rojo más oscuro al pasar el cursor */
+}
+
+/* Estilo para títulos */
+h1, h2, h3, h4 {
+    color: #333; /* Color de texto oscuro */
+}
+
+/* Estilo para las listas de motos y facturas */
+div {
+    margin-bottom: 20px; /* Margen inferior para separar elementos */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #e0e0e0; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    background: #f9f9f9; /* Fondo gris claro */
+}
+
+/* Estilo para los mensajes de alerta */
+.alert {
+    background-color: #f8d7da; /* Fondo rojo claro */
+    color: #721c24; /* Texto rojo oscuro */
+    border: 1px solid #f5c6cb; /* Borde rojo claro */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 4px; /* Bordes redondeados */
+    margin-top: 20px; /* Margen superior */
+}
+
+/* Estilo para la barra de navegación */
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    background-color: #343a40; /* Color de fondo oscuro */
+    padding: 15px; /* Espaciado interno */
+}
+
+.navbar a {
+    text-decoration: none; /* Sin subrayado */
+    color: white; /* Texto blanco */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 4px; /* Bordes redondeados */
+}
+
+.navbar a:hover {
+    background-color: #495057; /* Fondo más claro al pasar el cursor */
+}
+
+/* Estilo para los botones de modificar y eliminar en listas */
+button.modify {
+    background-color: #007bff; /* Color azul para modificar */
+}
+
+button.modify:hover {
+    background-color: #0056b3; /* Color azul más oscuro al pasar el cursor */
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArgenMoto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <nav id='navbar' class="navbar">
+                <a href="" onclick="inicio(event)">Inicio</a>
+                <a href="" onclick="listarFacturas(event)">Facturas</a>
+                <a href="" onclick="listarClientes(event)">Clientes</a>
+                <a href="" onclick="listarTurnos(event)">Turnos</a>
+                <a href="" onclick="listarVendedores(event)">Vendedores</a>
+                <a href="" onclick="listarMotos(event)">Motos</a>
+                <a href='' onclick="registrarClienteHTML(event)">Registrar Cliente</a>
+                <a href='' onclick="registrarVendedorHTML(event)">Registrar Vendedor</a>
+                <a href="" onclick="registrarMotoHTML(event)">Registrar Moto</a>
+                <a href="" onclick="registrarFacturaHTML(event)">Registrar Factura</a>
+        </nav>
+        <div id="container"> </div>
+
+    </header> 
+    <script>
+        const inicio=()=>{
+            document.getElementById('container').innerHTML=
+                `<button onclick="iniciarSesionHTML(event)">Iniciar Sesion</button>
+                <button onclick="registrarTurnoHTML(event)">Solicitar Turno</button>`
+        }
+        document.addEventListener('DOMContentLoaded',inicio())
+    </script>
+    <script type="text/javascript" src="Funciones/iniciarSesion.js"></script>
+    <script type="text/javascript" src="funciones/clientes.js"></script>
+    <script type="text/javascript" src="funciones/vendedores.js"></script>
+    <script type="text/javascript" src="funciones/motos.js"></script>
+    <script type="text/javascript" src="funciones/turnos.js"></script>
+    <script type="text/javascript" src="funciones/facturas.js"></script>
+    <script type="text/javascript" src="Funciones/turnos.js"></script>
+</body>
+</html>
