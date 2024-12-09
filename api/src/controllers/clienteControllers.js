@@ -9,7 +9,7 @@ const getClientes = async() => {
 // registra un cliente en la base de datos, con los atributos pasados por parametro
 const postCliente=async({nombre, apellido, DNI, provincia, localidad, domicilio})=>{
     const clienteConDNI = await Cliente.findByPk(DNI);
-    if (!clienteConDNI) throw Error("Ya hay un cliente registrado con ese DNI");
+    if (clienteConDNI) throw Error("Ya hay un cliente registrado con ese DNI");
     await Cliente.create({nombre, apellido, DNI, provincia, localidad, domicilio});
     return("Cliente registrado!")
 }

@@ -9,29 +9,33 @@
 <body>
     <header class="header">
         <nav id='navbar' class="navbar">
-                <a href="" onclick="inicio(event)">Inicio</a>
-                <a href="" onclick="listarFacturas(event)">Facturas</a>
-                <a href="" onclick="listarClientes(event)">Clientes</a>
-                <a href="" onclick="listarTurnos(event)">Turnos</a>
-                <a href="" onclick="listarVendedores(event)">Vendedores</a>
-                <a href="" onclick="listarMotos(event)">Motos</a>
-                <a href='' onclick="registrarClienteHTML(event)">Registrar Cliente</a>
-                <a href='' onclick="registrarVendedorHTML(event)">Registrar Vendedor</a>
-                <a href="" onclick="registrarMotoHTML(event)">Registrar Moto</a>
-                <a href="" onclick="registrarFacturaHTML(event)">Registrar Factura</a>
+                <a href="" onclick="listarFacturas(event)" class="nav-link">Facturas</a>
+                <a href="" onclick="listarClientes(event)" class="nav-link" >Clientes</a>
+                <a href="" onclick="listarTurnos(event)" class="nav-link">Turnos</a>
+                <a href="" onclick="listarVendedores(event)" class="nav-link">Vendedores</a>
+                <a href="" onclick="listarMotos(event)" class="nav-link">Motos</a>
+                <a href='' onclick="registrarClienteHTML(event)" class="nav-link">Registrar Cliente</a>
+                <a href='' onclick="registrarVendedorHTML(event)" class="nav-link">Registrar Vendedor</a>
+                <a href="" onclick="registrarMotoHTML(event)" class="nav-link">Registrar Moto</a>
+                <a href="" onclick="registrarFacturaHTML(event)" class="nav-link">Registrar Factura</a>
+                <a href="" onclick="cerrarSesion()" style='color:red'class="nav-link">Cerrar Sesion</a>
         </nav>
         <div id="container"> </div>
 
     </header> 
     <script>
-        const inicio=()=>{
+        window.inicio=()=>{
+            const isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn'));
+            const navLinks = document.querySelectorAll('.nav-link'); 
+            navLinks.forEach(link => { link.style.display = isLoggedIn? 'inline' : 'none';});
             document.getElementById('container').innerHTML=
-                `<button onclick="iniciarSesionHTML(event)">Iniciar Sesion</button>
-                <button onclick="registrarTurnoHTML(event)">Solicitar Turno</button>`
+                `<button onclick="iniciarSesionHTML(event)" style='display:${isLoggedIn? 'none':'inline'}'>Iniciar Sesion</button>
+                <button onclick="registrarTurnoHTML(event)" style='display:${isLoggedIn? 'none':'inline'}'>Solicitar Turno</button>
+                <h1 style='display:${!isLoggedIn? 'none':'inline'}'>Sesión iniciada como administrador</h1>`
         }
-        document.addEventListener('DOMContentLoaded',inicio())
+        document.addEventListener('DOMContentLoaded',window.inicio())
     </script>
-    <script type="text/javascript" src="Funciones/iniciarSesion.js"></script>
+    <script type="text/javascript" src="Funciones/admin.js"></script>
     <script type="text/javascript" src="funciones/clientes.js"></script>
     <script type="text/javascript" src="funciones/vendedores.js"></script>
     <script type="text/javascript" src="funciones/motos.js"></script>
