@@ -1,4 +1,4 @@
-const registrarTurnoHTML=(e)=>{
+const registrarTurnoHTML=async (e)=>{
     e.preventDefault()
     //fecha de hoy
     const hoy= new Date()
@@ -8,28 +8,30 @@ const registrarTurnoHTML=(e)=>{
     //separo la fecha y la hora y tomo solo la fecha
     const mañana=hoy.toISOString().split('T')[0];
     const horarios=["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"]
-    const turnos= JSON.parse(localStorage.getItem("turnos"));
-    //guardo en horariosNoDisp los horarios que ya esten registrados en la fecha seleccionada
-    
-    
+    const response= await fetch(`http://localhost:3001/turnos`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    const turnos= await response.json()  
         
     document.getElementById('container').innerHTML=
-    `<form>
-        <label>DNI</label>
-        <input id="DNI" type="number" required={true}/>
-        <label>Fecha y hora: </label>
-        <input min=${mañana} id="fecha" type="date" required={true}/>
-        <label>Horario</label>
-        <select id="horario" disabled={true} title="Debe seleccionar la fecha primero">
-            
-        </select>
-        <label>Motivo</label>
-        <select id='motivo'>
-            <option>Asesoramiento</option>
-            <option>Comprar</option>
-        </select>
-        <button onclick="registrarTurno(event)">Solicitar</button>
-    </form>`
+    `<div>
+        <button class="bi bi-arrow-90deg-left" onclick="window.inicio()"></button>
+        <form>
+            <label>DNI</label>
+            <input id="DNI" type="number" required={true}/>
+            <label>Fecha y hora: </label>
+                <input min=${mañana} id="fecha" type="date" required={true}/>
+            <label>Horario</label>
+            <select id="horario" disabled={true} title="Debe seleccionar la fecha primero"></select>
+            <label>Motivo</label>
+            <select id='motivo'>
+                <option>Asesoramiento</option>
+                <option>Comprar</option>
+            </select>
+            <button onclick="registrarTurno(event)">Solicitar</button>
+        </form>
+    </div>`
     //si el usuario selecciona un sabado o un domingo salta un alert 
     document.getElementById('fecha').addEventListener('input', function(e){
         //getUTCDay devuelve un entero del 0 al 6.. siendo 0: Domingo y 6:Sabado
@@ -49,41 +51,48 @@ const registrarTurnoHTML=(e)=>{
         const horario=document.getElementById('horario')
         horario.disabled = false;
         horario.title="";
+        //filtro los horarios que no estan disponibles en la fecha selecionada por el usuario
         const horariosNoDisp=turnos?.filter(t=>t.fecha===document.getElementById("fecha").value)
             .map(t=>t.horario)
+        //filtro de todos los horarios posibles, los que estan disponibles en la fecha seleccionada
         const horariosDisp=horarios.filter(h=>!horariosNoDisp?.includes(h))
             .map(h=>`<option value=${h}>${h}</option>`)
         
         document.getElementById('horario').innerHTML=horariosDisp;
-
     })
 }
 
-const registrarTurno=(e)=>{
+const registrarTurno=async(e)=>{
     e.preventDefault()
-    const turnos=JSON.parse(localStorage.getItem("turnos"));
     const turno={
-        id:turnos.length?turnos[turnos.length-1].id + 1:1,
         DNI:document.getElementById("DNI").value,
         fecha:document.getElementById("fecha").value,
         horario:document.getElementById("horario").value,
         motivo:document.getElementById("motivo").value,
         estado:'Pendiente'  
     }
-    turnos.push(turno)
-    localStorage.setItem("turnos",JSON.stringify(turnos))
-    //Elimino el contenido de los inputs para poder seguir con los registros 
-    document.getElementById("DNI").value = '';
-    document.getElementById("fecha").value = '';
-    document.getElementById("horario").value = '';
-    document.getElementById("motivo").value = '';
-    alert("turno soliciitado!")
+    const response=await fetch('http://localhost:3001/turnos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(turno)
+})
+    if(response.ok) {
+      //Elimino el contenido de los inputs para poder seguir con los registros 
+        window.inicio()
+        alert("turno soliciitado!")
+    }
+   
 }
  
 
-const listarTurnos = (e) => {
+const listarTurnos = async(e) => {
     e.preventDefault();
-    const turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+    const response = await fetch(`http://localhost:3001/turnos`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        }
+    )
+    const turnos= await response.json();
     document.getElementById("container").innerHTML = turnos.length === 0
         ? `<div><h1>No hay turnos registrados</h1></div>`
         : turnos.map(t => `
@@ -93,28 +102,32 @@ const listarTurnos = (e) => {
                 <h2>Horario: ${t.horario}</h2>
                 <h2>Motivo: ${t.motivo}</h2>
                 <h2>Estado: ${t.estado}</h2>
-                <button style='color:red' onclick='eliminarTurno(${t.id})'>Eliminar</button>
+                <button style='background-color:red' onclick='eliminarTurno(${t.id})'>Eliminar</button>
                 <button onclick='aceptarTurno(event,${t.id})'>Aceptar</button>
             </div>
         `).join('');
 }
 
-const aceptarTurno = (e, id) => {
+const aceptarTurno = async(e, id) => {
     e.preventDefault();
-    const turnos = JSON.parse(localStorage.getItem("turnos"));
-    const turno=turnos.find(t=>t.id==id)
-    turno.estado="aceptado";
-    const trns=turnos.filter(t=>t.id!=id);
-    trns.push(turno)
-
-    localStorage.setItem("turnos",JSON.stringify(trns))
-    
-    alert("Turno aceptado!");
-    listarTurnos(e);
+    const turno={
+        estado:"Aceptado"
+    }
+    const response=await fetch(`http://localhost:3001/turnos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(turno)
+    })
+    if(response.ok) { 
+        alert("Turno aceptado!")
+        return listarTurnos(e);
+    }
 }
 
-const eliminarTurno = (id) => {
-    const turnos = JSON.parse(localStorage.getItem("turnos"));
-    localStorage.setItem("turnos", JSON.stringify(turnos.filter(t => t.id !== id)));
-    listarTurnos(new Event('click'));
+const eliminarTurno = async(id) => {
+    await fetch(`http://localhost:3001/turnos/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    listarTurnos(new Event('click'))
 }

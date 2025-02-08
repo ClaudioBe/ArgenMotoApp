@@ -2,9 +2,7 @@ const { Moto } = require("../db");
 
 // Obtiene todas las motos de la BDD
 const getMotos = async () => {
-    const motos = await Moto.findAll();  
-    if (motos.length !== 0) return motos;
-    throw new Error("No hay motos registradas");
+    return await Moto.findAll();    
 };
 
 // Registra una moto en la base de datos, con los atributos pasados por parámetro
@@ -17,12 +15,6 @@ const postMoto = async ({ descripcion, marca, nro_chasis, modelo, anio, kilometr
 
 // Modifica la moto con el número de chasis y los atributos pasados por parámetro  
 const putMoto = async (nro_chasis, moto) => {
-    if (moto.nro_chasis) {
-        if (moto.nro_chasis !== nro_chasis) {
-            const existingMoto = await Moto.findByPk(moto.nro_chasis);
-            if (existingMoto) throw Error("Ya hay una moto registrada con ese número de chasis");
-        }
-    }
     const motoToUpdate = await Moto.findByPk(nro_chasis);
     if (!motoToUpdate) throw Error("No existe una moto con ese número de chasis");
     await Moto.update(moto, { where: { nro_chasis } });

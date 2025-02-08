@@ -8,22 +8,17 @@ module.exports = (sequelize) => {
         clienteDNI:{
             type:DataTypes.STRING,
         },
-        id:{
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            allowNull:false
-        },
         cuitVendedor:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.STRING,
         },
-        idMoto:{
-            type:DataTypes.INTEGER,
+        nro_chasis:{
+            type:DataTypes.STRING,
         },
         detalle: {
             type: DataTypes.STRING,
         },
         total: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
         },
         metodoPago: {
             type: DataTypes.STRING,

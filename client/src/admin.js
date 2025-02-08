@@ -2,11 +2,14 @@ const iniciarSesionHTML=(e)=>{
     e.preventDefault();
 
     document.getElementById('container').innerHTML=
-     `<form onsubmit='iniciarSesion(event)'>
-         <label>Contraseña:</label>
-         <input id='password' type='password' required={true}></input>
-         <button type='submit'>Iniciar Sesión</button>
-    </form>`
+    `<div>
+        <button onclick="window.inicio()" class="bi bi-arrow-90deg-left"></button>
+        <form onsubmit='iniciarSesion(event)'>
+            <label>Contraseña:</label>
+            <input id='password' type='password' required={true}></input>
+            <button type='submit'>Iniciar Sesión</button>
+        </form>
+    </div>`
 }
 const iniciarSesion=async(e)=>{
     e.preventDefault();

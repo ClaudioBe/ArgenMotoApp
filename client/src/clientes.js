@@ -61,8 +61,6 @@ const modificarClienteHTML=async(DNI)=>{
         <input id="nombre" type="text" value='${c.nombre}' required={true}/>
         <label>Apellido</label>
         <input id="apellido" type="text"  value='${c.apellido}' required={true}/>
-        <label>DNI</label>
-        <input id="DNI" type="number" value='${c.DNI}' required={true}/>
         <label>Provincia</label>
         <input id="provincia" type="text"  value='${c.provincia}' required={true}/>
         <label>Localidad</label>
@@ -81,7 +79,7 @@ const modificarCliente=async (e,DNI)=>{
     const cliente={
         nombre:document.getElementById("nombre").value,
         apellido:document.getElementById("apellido").value,
-        DNI:document.getElementById("DNI").value,
+        DNI,
         provincia:document.getElementById("provincia").value,
         localidad:document.getElementById("localidad").value,
         domicilio:document.getElementById("domicilio").value 
@@ -116,7 +114,7 @@ const listarClientes=async(e)=>{
              <h2>Provincia: ${c.provincia}</h2>
              <h2>Localidad: ${c.localidad}</h2>
              <h2>Domicilio: ${c.domicilio}</h2>
-             <button style='color:red' onclick='eliminarCliente(${c.DNI})'>Eliminar</button>
+             <button style='background-color:red' onclick='eliminarCliente(${c.DNI})'>Eliminar</button>
              <button onclick='modificarClienteHTML(${c.DNI})'>Modificar</button>
         </div>`
     )
@@ -124,10 +122,12 @@ const listarClientes=async(e)=>{
 
 const consultarCliente=async (e,DNI)=>{
     e.preventDefault()
-    const c= await fetch(`http://localhost:3001/clientes/${DNI}`, {
+    const response= await fetch(`http://localhost:3001/clientes/${DNI}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     })
+    const c=await response.json()
+   
     document.getElementById("container").innerHTML=c==null
     ?`<div><h2>No hay cliente registrado con ese DNI</h2></div>`
     :`<div>

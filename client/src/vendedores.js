@@ -20,9 +20,8 @@ const registrarVendedorHTML=(e)=>{
     </form>`
 }
 
-const registrarVendedor=(e)=>{
+const registrarVendedor=async(e)=>{
     e.preventDefault()
-    const vendedores=JSON.parse(localStorage.getItem("vendedores"));
     const vendedor={
         nombre:document.getElementById("nombre").value,
         apellido:document.getElementById("apellido").value,
@@ -32,30 +31,35 @@ const registrarVendedor=(e)=>{
         domicilio:document.getElementById("domicilio").value,
         email:document.getElementById("email").value
     }
-    const existe=vendedores.some(c =>c.CUIT===vendedor.CUIT);
-    if(existe) {alert("Ya existe un vendedor registrado con este CUIT!"); return}
-
-    vendedores.push(vendedor)
-    localStorage.setItem("vendedores",JSON.stringify(vendedores))
-    //Elimino el contenido de los inputs para poder seguir con los registros 
-    document.getElementById("nombre").value = '';
-    document.getElementById("apellido").value = '';
-    document.getElementById("CUIT").value = '';
-    document.getElementById("provincia").value = '';
-    document.getElementById("localidad").value = '';
-    document.getElementById("domicilio").value = '';
-    document.getElementById("email").value = '';
-    alert("vendedor registrado con éxito!")
+    const response=await fetch('http://localhost:3001/vendedores', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(vendedor)
+    })
+    if(response.ok) {
+        //Elimino el contenido de los inputs para poder seguir con los registros 
+        document.getElementById("nombre").value = '';
+        document.getElementById("apellido").value = '';
+        document.getElementById("CUIT").value = '';
+        document.getElementById("provincia").value = '';
+        document.getElementById("localidad").value = '';
+        document.getElementById("domicilio").value = '';
+        document.getElementById("email").value = '';
+        alert("Vendedor registrado con éxito!")
+    }else{
+        alert("Ya existe un vendedor registrado con ese CUIT!")
+    }
 }
 
-const modificarVendedorHTML=(CUIT)=> {
-    const vendedores = JSON.parse(localStorage.getItem("vendedores"));
-    const vendedor = vendedores.find(v => v.CUIT == CUIT);
-    
+const modificarVendedorHTML=async(CUIT)=> {
+    const response = await fetch(`http://localhost:3001/vendedores/${CUIT}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        }
+    )
+    const vendedor= await response.json();
     document.getElementById('container').innerHTML =
     `<form onsubmit='modificarVendedor(event, ${CUIT})'>
-        <label>CUIT</label>
-        <input id="CUIT" type="number" value='${vendedor.CUIT}' readonly required />
         <label>Nombre</label>
         <input id="nombre" type="text" value='${vendedor.nombre}' required />
         <label>Apellido</label>
@@ -73,34 +77,38 @@ const modificarVendedorHTML=(CUIT)=> {
     </form>`;
 }
 
-const modificarVendedor=(e, CUIT)=> {
+const modificarVendedor=async(e, CUIT)=> {
     e.preventDefault();
-    const vendedores = JSON.parse(localStorage.getItem('vendedores'));
-
-    // Filtra el vendedor que se va a modificar
-    const vendedoresActualizados = vendedores.filter(v => v.CUIT != CUIT);
 
     const vendedorModificado = {
         nombre: document.getElementById("nombre").value,
         apellido: document.getElementById("apellido").value,
-        CUIT: CUIT,  // Mantenemos el mismo CUIT
+        CUIT,
         provincia: document.getElementById("provincia").value,
         localidad: document.getElementById("localidad").value,
         domicilio: document.getElementById("domicilio").value,
         email: document.getElementById("email").value
     };
 
-    // Agrega el vendedor modificado a la lista
-    vendedoresActualizados.push(vendedorModificado);
-    localStorage.setItem("vendedores", JSON.stringify(vendedoresActualizados));
-
-    alert("Vendedor modificado con éxito!");
-    listarVendedores(new Event('click'));
+    const response=await fetch(`http://localhost:3001/vendedores/${CUIT}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(vendedorModificado)
+    })
+    if(response.ok) { 
+        alert("Vendedor modificado con éxito!")
+        return listarVendedores(e);
+    }
+    else alert("Ya hay un vendedor registrado con ese CUIT!") 
 }
 
-const listarVendedores=(e)=>{
+const listarVendedores=async(e)=>{
     e.preventDefault()
-    const vendedores=JSON.parse(localStorage.getItem("vendedores"));
+    const response= await fetch(`http://localhost:3001/vendedores`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    const vendedores= await response.json()
     document.getElementById("container").innerHTML=vendedores.length==0
     ?`<div><h1>No hay vendedores registrados</h1></div>` 
     :vendedores.map(v=>
@@ -112,32 +120,39 @@ const listarVendedores=(e)=>{
              <h2>Localidad: ${v.localidad}</h2>
              <h2>Domicilio: ${v.domicilio}</h2>
              <h2>Email: ${v.email}</h2>
-             <button style='color:red' onclick='eliminarVendedor(${v.CUIT})'>Eliminar</button>
+             <button style='background-color:red' onclick='eliminarVendedor(${v.CUIT})'>Eliminar</button>
              <button onclick='modificarVendedorHTML(${v.CUIT})'>Modificar</button>
 
         </div>`
     )
 }
 
-const consultarVendedor=(e,CUIT)=>{
+const consultarVendedor=async (e,CUIT)=>{
     e.preventDefault()
-    const vendedores=JSON.parse(localStorage.getItem("vendedores"));
-    const vendedor=vendedores.find(v=>v.CUIT==CUIT);
-    document.getElementById("container").innerHTML=vendedor==null
+    const response= await fetch(`http://localhost:3001/vendedores/${CUIT}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    const v= await response.json()
+
+    document.getElementById("container").innerHTML=v==null
     ?`<div><h2>No hay vendedor registrado con ese CUIT</h2></div>`
     :`<div>
-             <h2>Nombre: ${c.nombre}</h2>
-             <h2>Apellido: ${c.apellido}</h2>
-             <h2>CUIT: ${c.CUIT}</h2>
-             <h2>Provincia: ${c.provincia}</h2>
-             <h2>Localidad: ${c.localidad}</h2>
-             <h2>Domicilio: ${c.domicilio}</h2>
-             <h2>Email: ${c.email}</h2>
+             <h2>Nombre: ${v.nombre}</h2>
+             <h2>Apellido: ${v.apellido}</h2>
+             <h2>CUIT: ${v.CUIT}</h2>
+             <h2>Provincia: ${v.provincia}</h2>
+             <h2>Localidad: ${v.localidad}</h2>
+             <h2>Domicilio: ${v.domicilio}</h2>
+             <h2>Email: ${v.email}</h2>
+             <button onclick='modificarVendedorHTML(${v.CUIT})'>Modificar</button>
         </div>`
 }
 
-const eliminarVendedor=(CUIT)=>{
-    const vendedores=JSON.parse(localStorage.getItem("vendedores"));
-    localStorage.setItem("vendedores",JSON.stringify(vendedores.filter(c=>c.CUIT!=CUIT)));
-    listarVendedores(new Event('click'))
+const eliminarVendedor=async(CUIT)=>{
+    await fetch(`http://localhost:3001/vendedores/${CUIT}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    listarClientes(new Event('click'))
 }

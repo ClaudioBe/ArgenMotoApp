@@ -21,10 +21,10 @@ const login=async(password)=>{
 }
 
 //solo se usa una vez para guar en la bbdd el admin con la contraseña
-// const registrarAdmin=async (password)=>{
-//     const hash = hashPassword(password);
-//     const admin = await Administrador.create({contraseña:hash})
-//     return admin;
-// }
+ const registrarAdmin=async (password)=>{
+     const hash = hashPassword(password);
+    const admin = await Administrador.create({contraseña:hash})
+     return admin;
+}
 
-module.exports={/*registrarAdmin,*/ login};
+module.exports={registrarAdmin,login};

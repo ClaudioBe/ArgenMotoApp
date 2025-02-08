@@ -2,9 +2,7 @@ const {Cliente} = require("../db");
 
 // Obtiene todos los clientes de la BDD
 const getClientes = async() => {
-    const clientes = await Cliente.findAll();  
-    if(clientes.length!=0)return clientes;
-    throw new Error("No hay clientes registrados");
+    return await Cliente.findAll(); 
 }
 // registra un cliente en la base de datos, con los atributos pasados por parametro
 const postCliente=async({nombre, apellido, DNI, provincia, localidad, domicilio})=>{

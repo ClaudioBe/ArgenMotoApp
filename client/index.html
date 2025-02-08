@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArgenMoto</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css">
 </head>
 <body>
     <header class="header">
@@ -18,7 +20,7 @@
                 <a href='' onclick="registrarVendedorHTML(event)" class="nav-link">Registrar Vendedor</a>
                 <a href="" onclick="registrarMotoHTML(event)" class="nav-link">Registrar Moto</a>
                 <a href="" onclick="registrarFacturaHTML(event)" class="nav-link">Registrar Factura</a>
-                <a href="" onclick="cerrarSesion()" style='color:red'class="nav-link">Cerrar Sesion</a>
+                <a href="" onclick="cerrarSesion()" class="bi bi-box-arrow-in-left nav-link" style="color: red; font-size: 24px;"></a>
         </nav>
         <div id="container"> </div>
 
@@ -35,12 +37,12 @@
         }
         document.addEventListener('DOMContentLoaded',window.inicio())
     </script>
-    <script type="text/javascript" src="Funciones/admin.js"></script>
-    <script type="text/javascript" src="funciones/clientes.js"></script>
-    <script type="text/javascript" src="funciones/vendedores.js"></script>
-    <script type="text/javascript" src="funciones/motos.js"></script>
-    <script type="text/javascript" src="funciones/turnos.js"></script>
-    <script type="text/javascript" src="funciones/facturas.js"></script>
-    <script type="text/javascript" src="Funciones/turnos.js"></script>
+    <script type="text/javascript" src="src/admin.js"></script>
+    <script type="text/javascript" src="src/clientes.js"></script>
+    <script type="text/javascript" src="src/vendedores.js"></script>
+    <script type="text/javascript" src="src/motos.js"></script>
+    <script type="text/javascript" src="src/turnos.js"></script>
+    <script type="text/javascript" src="src/facturas.js"></script>
+    <script type="text/javascript" src="src/turnos.js"></script>
 </body>
 </html>

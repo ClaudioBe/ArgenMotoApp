@@ -1,7 +1,7 @@
 const {Router} = require('express'); 
 const adminRouter = Router(); 
 
-const {/*registrarAdmin,*/ login} = require('../controllers/adminControllers')
+const {registrarAdmin,login} = require('../controllers/adminControllers')
 
 adminRouter.post('/login', async (req, res) => { 
     try {
@@ -12,13 +12,13 @@ adminRouter.post('/login', async (req, res) => {
     }
 }); 
 //solo se usa una vez para guar en la bbdd el admin con la contraseña
-// adminRouter.post('/registrar', async (req, res) => { 
-//     try { 
-//         const admin = await registrarAdmin(req.body.contraseña);
-//         res.status(201).json(admin);
-//     } catch (error) { 
-//         res.status(400).send(error.message)
-//     } 
-// });
+ adminRouter.post('/registrar', async (req, res) => { 
+     try { 
+         const admin = await registrarAdmin(req.body.contraseña);
+        res.status(201).json(admin);
+     } catch (error) { 
+         res.status(400).send(error.message)
+     } 
+});
     
 module.exports=adminRouter;

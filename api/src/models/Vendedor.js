@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
             type:DataTypes.STRING,
         },
         CUIT:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.STRING,
             primaryKey:true,
             allowNull:false
         },

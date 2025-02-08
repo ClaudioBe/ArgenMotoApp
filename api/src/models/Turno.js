@@ -1,26 +1,21 @@
 const { DataTypes} = require('sequelize');
 
 module.exports = (sequelize) => {
-    sequelize.define('cliente', {
-        nombre:{
-            type: DataTypes.STRING,
-        },
-        apellido:{
-            type:DataTypes.STRING,
-        },
+    sequelize.define('turno', {
         DNI:{
-            type:DataTypes.STRING,
-            primaryKey:true,
-            allowNull:false
-        },
-        provincia:{
-            type:DataTypes.STRING,
-        },
-        localidad:{
-            type:DataTypes.STRING,
-        },
-        domicilio: {
             type: DataTypes.STRING,
         },
+        fecha:{
+            type:DataTypes.STRING,
+        },
+        horario:{
+            type:DataTypes.STRING,
+        },
+        motivo:{
+            type:DataTypes.STRING,
+        },
+        estado:{
+            type:DataTypes.STRING,
+        }
     },{timestamps:false})
 }

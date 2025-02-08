@@ -2,9 +2,7 @@ const { Vendedor } = require("../db");
 
 // Obtiene todos los vendedores de la BDD
 const getVendedores = async () => {
-    const vendedores = await Vendedor.findAll();  
-    if (vendedores.length !== 0) return vendedores;
-    throw new Error("No hay vendedores registrados");
+    return await Vendedor.findAll();  
 };
 
 // Registra un vendedor en la base de datos, con los atributos pasados por parámetro

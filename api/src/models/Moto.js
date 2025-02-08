@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
             type:DataTypes.STRING,
         },
         nro_chasis:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.STRING,
             primaryKey:true,
             allowNull:false
         },
@@ -17,22 +17,22 @@ module.exports = (sequelize) => {
             type:DataTypes.STRING,
         },
         anio:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.STRING,
         },
         kilometraje: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
         },
         stock_actual: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
         },
         stock_minimo: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
         },
         stock_maximo: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
         },
         precio: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
         },
     },{timestamps:false})
 }
